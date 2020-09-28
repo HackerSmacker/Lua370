@@ -27,4 +27,4 @@ luac: $(OBJS)
 
 .PHONY: clean
 clean:
-	rm *.obj
+	rm -f *.obj compile.log
