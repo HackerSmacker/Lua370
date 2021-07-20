@@ -10,7 +10,7 @@
 #include "lprefix.h"
 
 
-//#include <stddef.h>
+#include <stddef.h>
 #include <string.h>
 
 #include "lua.h"
@@ -228,7 +228,7 @@ static void preinit_thread (lua_State *L, global_State *g) {
   L->errorJmp = NULL;
   L->nCcalls = 0;
   L->hook = NULL;
-  //L->hookmask = 0;
+  L->hookmask = 0;
   L->basehookcount = 0;
   L->allowhook = 1;
   resethookcount(L);
@@ -248,7 +248,7 @@ static void close_state (lua_State *L) {
   luaM_freearray(L, G(L)->strt.hash, G(L)->strt.size);
   freestack(L);
   lua_assert(gettotalbytes(g) == sizeof(LG));
-  //(*g->frealloc)(g->ud, fromstate(L), sizeof(LG), 0);  /* free main block */
+  (*g->frealloc)(g->ud, fromstate(L), sizeof(LG), 0);  /* free main block */
 }
 
 
@@ -268,7 +268,7 @@ LUA_API lua_State *lua_newthread (lua_State *L) {
   setthvalue(L, L->top, L1);
   api_incr_top(L);
   preinit_thread(L1, g);
-  //L1->hookmask = L->hookmask;
+  L1->hookmask = L->hookmask;
   L1->basehookcount = L->basehookcount;
   L1->hook = L->hook;
   resethookcount(L1);
@@ -283,12 +283,12 @@ LUA_API lua_State *lua_newthread (lua_State *L) {
 
 
 void luaE_freethread (lua_State *L, lua_State *L1) {
-  //LX *l = fromstate(L1);
+  LX *l = fromstate(L1);
   luaF_close(L1, L1->stack);  /* close all upvalues for this thread */
   lua_assert(L1->openupval == NULL);
   luai_userstatefree(L, L1);
   freestack(L1);
-  //luaM_free(L, l);
+  luaM_free(L, l);
 }
 
 

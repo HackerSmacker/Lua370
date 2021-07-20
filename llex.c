@@ -10,7 +10,7 @@
 #include "lprefix.h"
 
 
-#include "locale.h"
+#include <locale.h>
 #include <string.h>
 
 #include "lua.h"
@@ -137,7 +137,7 @@ TString *luaX_newstring (LexState *ls, const char *str, size_t l) {
     luaC_checkGC(L);
   }
   else {  /* string already present */
-  //  ts = tsvalue(keyfromval(o));
+    ts = tsvalue(keyfromval(o));  /* re-use value previously stored */
   }
   L->top--;  /* remove string from stack */
   return ts;

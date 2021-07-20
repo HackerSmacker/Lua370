@@ -1,0 +1,17 @@
+GCC = gcccms.exe
+GCCINCDIR = << PLEASE SET THIS! >>
+GCCFLAGS = -I $(GCCINCDIR) -c -S
+ASM = lapi.s lauxlib.s lbaselib.s lbitlib.s lcode.s lcorolib.s lctype.s ldblib.s ldebug.s ldo.s ldump.s lfunc.s lgc.s linit.s liolib.s llex.s lmathlib.s lmem.s loadlib.s lobject.s lopcodes.s loslib.s lparser.s lstate.s lstring.s lstrlib.s ltable.s ltablib.s ltm.s lundump.s lutf8lib.s lvm.s lzio.s lua.s luac.s hello.s
+
+all: $(ASM)
+	unix2dos $(ASM)
+	@echo "Done. Please upload the assembly sources to MVS and assemble them now."
+
+%.s: %.c
+	@echo $<
+	@$(GCC) $(GCCFLAGS) $<
+
+
+.PHONY: clean
+clean:
+	rm -f *.s 

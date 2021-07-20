@@ -7,9 +7,9 @@
 
 #ifndef lauxlib_h
 #define lauxlib_h
-#define BUFSIZ 4096
 
-//#include <stddef.h>
+
+#include <stddef.h>
 #include <stdio.h>
 
 #include "lua.h"

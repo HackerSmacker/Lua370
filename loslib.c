@@ -11,7 +11,7 @@
 
 
 #include <errno.h>
-#include "locale.h"
+#include <locale.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -164,8 +164,7 @@ static int os_rename (lua_State *L) {
 
 
 static int os_tmpname (lua_State *L) {
-  char buff[4096];
-  //char buff[LUA_TMPNAMBUFSIZE];
+  char buff[LUA_TMPNAMBUFSIZE];
   int err;
   lua_tmpnam(buff, err);
   if (err)

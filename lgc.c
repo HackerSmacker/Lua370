@@ -246,6 +246,18 @@ static void reallymarkobject (global_State *g, GCObject *o) {
       g->GCmemtrav += sizelstring(gco2ts(o)->u.lnglen);
       break;
     }
+    case LUA_TUSERDATA: {
+      TValue uvalue;
+      markobjectN(g, gco2u(o)->metatable);  /* mark its metatable */
+      gray2black(o);
+      g->GCmemtrav += sizeudata(gco2u(o));
+      getuservalue(g->mainthread, gco2u(o), &uvalue);
+      if (valiswhite(&uvalue)) {  /* markvalue(g, &uvalue); */
+        o = gcvalue(&uvalue);
+        goto reentry;
+      }
+      break;
+    }
     case LUA_TLCL: {
       linkgclist(gco2lcl(o), g->gray);
       break;

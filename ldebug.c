@@ -11,7 +11,7 @@
 
 
 #include <stdarg.h>
-//#include <stddef.h>
+#include <stddef.h>
 #include <string.h>
 
 #include "lua.h"
@@ -88,7 +88,7 @@ LUA_API void lua_sethook (lua_State *L, lua_Hook func, int mask, int count) {
   L->hook = func;
   L->basehookcount = count;
   resethookcount(L);
-  //L->hookmask = cast_byte(mask);
+  L->hookmask = cast_byte(mask);
 }
 
 
@@ -98,8 +98,7 @@ LUA_API lua_Hook lua_gethook (lua_State *L) {
 
 
 LUA_API int lua_gethookmask (lua_State *L) {
-  return 0;
-  //return L->hookmask;
+  return L->hookmask;
 }
 
 
@@ -666,8 +665,7 @@ l_noret luaG_runerror (lua_State *L, const char *fmt, ...) {
 
 void luaG_traceexec (lua_State *L) {
   CallInfo *ci = L->ci;
-  lu_byte mask = 0;
-  //lu_byte mask = L->hookmask;
+  lu_byte mask = L->hookmask;
   int counthook = (--L->hookcount == 0 && (mask & LUA_MASKCOUNT));
   if (counthook)
     resethookcount(L);  /* reset count */

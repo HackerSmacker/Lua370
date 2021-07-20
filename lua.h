@@ -10,7 +10,8 @@
 #define lua_h
 
 #include <stdarg.h>
-#include <stdlib.h>
+#include <stddef.h>
+
 
 #include "luaconf.h"
 
@@ -20,10 +21,10 @@
 #define LUA_VERSION_NUM		503
 #define LUA_VERSION_RELEASE	"5"
 
-#define LUA_VERSION	"Lua " LUA_VERSION_MAJOR "." LUA_VERSION_MINOR
+#define LUA_VERSION	"Lua/370 " LUA_VERSION_MAJOR "." LUA_VERSION_MINOR
 #define LUA_RELEASE	LUA_VERSION "." LUA_VERSION_RELEASE
-#define LUA_COPYRIGHT	LUA_RELEASE "  Copyright (C) 1994-2018 Lua.org, PUC-Rio"
-#define LUA_AUTHORS	"R. Ierusalimschy, L. H. de Figueiredo, W. Celes"
+#define LUA_COPYRIGHT	LUA_RELEASE "  (C) 1994-2018 Lua.org, PUC-Rio, HS Soft"
+#define LUA_AUTHORS	"R. Ierusalimschy, L. H. de Figueiredo, W. Celes, HS"
 
 
 /* mark for precompiled code ('<esc>Lua') */
@@ -84,15 +85,19 @@ typedef struct lua_State lua_State;
 #define LUA_RIDX_LAST		LUA_RIDX_GLOBALS
 
 
+/* type of numbers in Lua */
 typedef LUA_NUMBER lua_Number;
+
+
+/* type for integer functions */
 typedef LUA_INTEGER lua_Integer;
+
+/* unsigned integer type */
 typedef LUA_UNSIGNED lua_Unsigned;
+
+/* type for continuation-function contexts */
 typedef LUA_KCONTEXT lua_KContext;
 
-//#define lua_Number LUA_NUMBER;
-//#define lua_Integer LUA_INTEGER;
-//#define lua_Unsigned LUA_UNSIGNED;
-//#define lua_KContext LUA_KCONTEXT;
 
 /*
 ** Type for C functions registered with Lua
@@ -102,10 +107,7 @@ typedef int (*lua_CFunction) (lua_State *L);
 /*
 ** Type for continuation functions
 */
-typedef int (*lua_KFunction) (
-	lua_State *L, 
-	int status, 
-	lua_KContext ctx);
+typedef int (*lua_KFunction) (lua_State *L, int status, lua_KContext ctx);
 
 
 /*

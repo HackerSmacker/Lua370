@@ -13,8 +13,8 @@
 #include <ctype.h>
 #include <float.h>
 #include <limits.h>
-#include "locale.h"
-//#include <stddef.h>
+#include <locale.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1249,7 +1249,7 @@ static KOption getoption (Header *h, const char **fmt, int *size) {
     case '<': h->islittle = 1; break;
     case '>': h->islittle = 0; break;
     case '=': h->islittle = nativeendian.little; break;
-    //case '!': h->maxalign = getnumlimit(h, fmt, MAXALIGN); break;
+    case '!': h->maxalign = getnumlimit(h, fmt, MAXALIGN); break;
     default: luaL_error(h->L, "invalid format option '%c'", opt);
   }
   return Knop;

@@ -12,7 +12,7 @@
 
 #include <ctype.h>
 #include <errno.h>
-#include "locale.h"
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -285,7 +285,7 @@ static int io_popen (lua_State *L) {
 
 static int io_tmpfile (lua_State *L) {
   LStream *p = newfile(L);
-  //p->f = tmpfile();
+  p->f = tmpfile();
   return (p->f == NULL) ? luaL_fileresult(L, 0, NULL) : 1;
 }
 
@@ -673,8 +673,7 @@ static int f_seek (lua_State *L) {
 
 
 static int f_setvbuf (lua_State *L) {
-  static const int mode[] = {0, 1, 2};
-  //static const int mode[] = {_IONBF, _IOFBF, _IOLBF};
+  static const int mode[] = {_IONBF, _IOFBF, _IOLBF};
   static const char *const modenames[] = {"no", "full", "line", NULL};
   FILE *f = tofile(L);
   int op = luaL_checkoption(L, 2, NULL, modenames);

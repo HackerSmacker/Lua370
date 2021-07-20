@@ -376,16 +376,14 @@ static int moveresults (lua_State *L, const TValue *firstResult, StkId res,
 int luaD_poscall (lua_State *L, CallInfo *ci, StkId firstResult, int nres) {
   StkId res;
   int wanted = ci->nresults;
-/**
   if (L->hookmask & (LUA_MASKRET | LUA_MASKLINE)) {
     if (L->hookmask & LUA_MASKRET) {
-      ptrdiff_t fr = savestack(L, firstResult);
+      ptrdiff_t fr = savestack(L, firstResult);  /* hook may change stack */
       luaD_hook(L, LUA_HOOKRET, -1);
       firstResult = restorestack(L, fr);
     }
-    L->oldpc = ci->previous->u.l.savedpc;
+    L->oldpc = ci->previous->u.l.savedpc;  /* 'oldpc' for caller function */
   }
-**/
   res = ci->func;  /* res == final position of 1st result */
   L->ci = ci->previous;  /* back to caller */
   /* move results to proper place */
@@ -430,8 +428,8 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
       ci->top = L->top + LUA_MINSTACK;
       lua_assert(ci->top <= L->stack_last);
       ci->callstatus = 0;
-//      if (L->hookmask & LUA_MASKCALL)
-//        luaD_hook(L, LUA_HOOKCALL, -1);
+      if (L->hookmask & LUA_MASKCALL)
+        luaD_hook(L, LUA_HOOKCALL, -1);
       lua_unlock(L);
       n = (*f)(L);  /* do the actual call */
       lua_lock(L);
@@ -460,8 +458,8 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
       lua_assert(ci->top <= L->stack_last);
       ci->u.l.savedpc = p->code;  /* starting point */
       ci->callstatus = CIST_LUA;
-//      if (L->hookmask & LUA_MASKCALL)
-//        callhook(L, ci);
+      if (L->hookmask & LUA_MASKCALL)
+        callhook(L, ci);
       return 0;
     }
     default: {  /* not a function */

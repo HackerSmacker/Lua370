@@ -191,13 +191,13 @@ struct lua_State {
   struct lua_longjmp *errorJmp;  /* current error recover point */
   CallInfo base_ci;  /* CallInfo for first level (C calling Lua) */
   volatile lua_Hook hook;
-  ptrdiff_t errfunc;
+  ptrdiff_t errfunc;  /* current error handling function (stack index) */
   int stacksize;
   int basehookcount;
   int hookcount;
-  unsigned short nny;
-  unsigned short nCcalls;
- // sig_atomic_t hookmask;
+  unsigned short nny;  /* number of non-yieldable calls in stack */
+  unsigned short nCcalls;  /* number of nested C calls */
+  l_signalT hookmask;
   lu_byte allowhook;
 };
 
